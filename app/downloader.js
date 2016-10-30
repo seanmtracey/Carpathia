@@ -93,6 +93,7 @@ const carpathia = (function(){
 	}());
 
 	const hideDialogWithButton = function(){
+		reset();
 		dialog.button.removeEventListener('click', hideDialogWithButton, false);
 		dialog.hide();
 	};
