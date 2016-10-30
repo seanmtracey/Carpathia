@@ -1,5 +1,5 @@
 # Carpathia
-An Electron-powered app for downloading your Vines to you computer.
+An Electron-powered app for downloading your Vines to your computer.
 
 ## Vine is going away...
 ...and this makes me sad. I've almost 200 Vines taken over 3 years that I want to save, so I've made this app for myself (and others) to make getting at all those memories easier.
