@@ -2,9 +2,6 @@ const electron = require('electron');
 const app = electron.app;
 const BrowserWindow = electron.BrowserWindow;
 
-// var remote = electron.remote; 
-// var dialog = electron.dialog;
-
 let win;
 
 function createWindow () {

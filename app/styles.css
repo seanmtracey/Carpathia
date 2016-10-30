@@ -153,6 +153,17 @@ form button:focus{
 	width: 40px;
 }
 
+#progressDialog .holder button{
+	margin-top: 1em;
+    font-size: 1em;
+    border: 1px solid white;
+    background: #489c72;
+    color: white;
+    border-radius: 20px;
+    padding: 0.2em 0.4em 0.3em 0.3em;
+	cursor: pointer;
+}
+
 #downloadDialog #downloadBarHolder{
 	width: 300px;
 	border: 1px solid #489c72;

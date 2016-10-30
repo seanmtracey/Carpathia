@@ -31,17 +31,27 @@ const carpathia = (function(){
 		const titleElement = dialogElement.querySelector('#header');
 		const messageElement = dialogElement.querySelector('#message');
 		const spinnerElement = dialogElement.querySelector('#spinner');
+		const buttonElement = dialogElement.querySelector('#actionButton');
 
-		function showDialog(title, message, showSpinner = true){
+		function showDialog(title, message, showSpinner = true, showButton = false, buttonWords = ""){
 			
 			titleElement.textContent = title;
 			messageElement.textContent = message;
 			dialogElement.dataset.active = "true";
+			
 			if(!showSpinner){
 				spinnerElement.dataset.visible = "false";
 			} else {
 				spinnerElement.dataset.visible = "true";		
 			}
+
+			if(!showButton){
+				buttonElement.dataset.visible = "false";
+			} else {
+				buttonElement.textContent = buttonWords;
+				buttonElement.dataset.visible = "true";		
+			}
+
 			return wait(DIALOG_ANIMATION_TIME);
 		}
 
@@ -52,7 +62,8 @@ const carpathia = (function(){
 
 		return {
 			show : showDialog,
-			hide : hideDialog
+			hide : hideDialog,
+			button : buttonElement
 		};
 
 	}());
@@ -220,9 +231,22 @@ const carpathia = (function(){
 				const idStartIdx = body.indexOf(`${idIndicatorString}`) + idIndicatorString.length;
 				const idEndIdx = body.indexOf(`"`, idStartIdx);
 				const profileID = body.slice(idStartIdx, idEndIdx);
+				console.log(profileID);
 				return profileID;
 			})
 		;
+	}
+
+	function figureOutProfileID(input){
+
+		const profileRequests = [];
+
+		if(input.indexOf(VINE_ROOT) > -1){
+			return fetch(input);
+		} else {
+			return fetch(`${VINE_ROOT}/${input}`);
+		}
+
 	}
 
 	const userNameForm = document.querySelector('#userNameForm');
@@ -233,11 +257,28 @@ const carpathia = (function(){
 	userNameForm.addEventListener('submit', function(e){
 		console.log("Form submitted");
 
-		fetch(`${VINE_ROOT}/${this.usernameInput.value}`)
+		figureOutProfileID(this.usernameInput.value)
 			.then(res => {
 				console.log(res);
+
 				if(res.status !== 200){
 					// Handle no profile
+					const buttonHandler = function(){
+						userNameForm.dataset.completed = "false";
+						userNameForm.dataset.active = "true";
+						dialog.button.removeEventListener('click', buttonHandler, false);
+						dialog.hide();
+					};
+
+					dialog.button.addEventListener('click', buttonHandler, false);
+					dialog.show(
+						`Couldn't find profile`,
+						'If you entered the username for your profile, try entering the URL for it instead',
+						false,
+						true,
+						"ok"
+					);	
+					throw "Profile doesn't exist";
 				} else {
 					return getProfileID(res);
 				}
