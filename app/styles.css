@@ -1,0 +1,167 @@
+*::-webkit-input-placeholder { 
+  color: rgba(255,255,255,.5);
+}
+*::-moz-placeholder {
+  color: rgba(255,255,255,.5);
+}
+*:-ms-input-placeholder {
+  color: rgba(255,255,255,.5);
+}
+*:-moz-placeholder {
+  color: rgba(255,255,255,.5);
+}
+
+*[data-visible="false"]{
+	display: none;
+}
+
+form[data-active="false"]{
+	position: fixed;
+	left: 0;
+	top: 0;
+	transform: translateX(100%);
+}
+
+form[data-completed="true"]{
+	transform: translateX(-100%);
+}
+
+html, body{
+	font-family: 'Rubik', sans-serif;
+	margin: 0;
+	padding: 0;
+	height: 100%;
+	width: 100%;
+	background-color: #489c72;
+	color: white;
+}
+
+form{
+	width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+	color: white;
+	position: fixed;
+	transform: translateX(0%);
+	-webkit-transition: transform 0.3s ease-in-out;
+}
+
+form label{
+	margin-bottom: 1em;
+}
+
+form input{
+	color: white;
+}
+
+form input[type="text"]{
+	min-width: 60%;
+    font-size: 1.3em;
+    border: 1px solid rgba(255, 255, 255, 0.49);
+    border-radius: 5px;
+    background: rgba(255,255,255,0.1);
+    padding: 0.5em;
+	outline: none;
+}
+
+form button{
+	margin-top: 1em;
+    font-size: 1em;
+    border: 1px solid white;
+    background: white;
+    color: #489c72;
+    border-radius: 20px;
+    padding: 0.2em 0.4em 0.3em 0.3em;
+	cursor: pointer;
+}
+
+form button:focus{
+	outline: none;
+}
+
+#progress{
+	width: 100%;
+	height: 30px;
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	display: flex;
+	align-items: center;
+	align-content: center;
+	justify-content: center;
+}
+
+#progress span{
+	width: 8px;
+	height: 8px;
+	max-width: 8px;
+	max-height: 8px;
+	background: white;
+	border-radius: 100%;
+	margin: 0 3px;
+	-webkit-transition: opacity .5s, max-width .5s, max-height .5s;
+}
+
+#progress span[data-selected="false"]{
+	opacity: 0.5;
+	max-width: 6px;
+	max-height: 6px;
+}
+
+#progressDialog, #downloadDialog{
+	position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    align-content: center;
+	transform: translateY(-100%);
+	-webkit-transition: transform 0.7s cubic-bezier(.87,-.41,.19,1.44);
+}
+
+#progressDialog[data-active="true"], #downloadDialog[data-active="true"]{
+	transform: translateY(0%);
+}
+
+#progressDialog .holder, #downloadDialog .holder{
+	background: white;
+    border-radius: 10px;
+    color: black;
+    display: flex;
+    align-items: center;
+    align-content: center;
+    justify-content: center;
+    flex-direction: column;
+    width: 80%;
+    padding: 1em;
+    box-sizing: border-box;
+    text-align: center;
+    box-shadow: 0 5px 5px rgba(0,0,0,.3);
+}
+
+#progressDialog .holder #header, #downloadDialog .holder #header{
+	margin: 0;
+}
+
+#progressDialog .holder img{
+	width: 40px;
+}
+
+#downloadDialog #downloadBarHolder{
+	width: 300px;
+	border: 1px solid #489c72;
+	height: 10px;
+	border-radius: 3px;
+}
+
+#downloadDialog #downloadBar{
+	width: 0px;
+    height: 100%;
+    background: #489c72;
+}

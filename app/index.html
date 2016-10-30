@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<title>Carpathia</title>
+		<link href="https://fonts.googleapis.com/css?family=Rubik" rel="stylesheet">
+		<link rel="stylesheet" href="styles.css" type="text/css" />
+	</head>
+
+	<body>
+		
+		<form id="userNameForm" data-active="true" data-completed="false">
+			<label for="usernameInput">Enter your Vine username or profile URL...</label>
+			<input type="text" name="usernameInput" placeholder="seanmtracey" required />
+			<button>check</button>
+		</form>
+
+		<form id="fileDestinationForm" data-active="false" data-completed="false">
+			<h3></h3>
+			<label for="destinationSelection">Choose a folder to save them in...</label>
+			<button id="destinationSelection">Select Folder</button>
+		</form>
+
+		<div id="downloadDialog" data-active="false">
+			<div class="holder">
+				<h3>Downloading your Vines</h3>
+				<div id="downloadBarHolder">
+					<div id="downloadBar"></div>
+				</div>
+				<p></p>
+			</div>
+		</div>
+
+		<div id="progressDialog" data-active="false" data-completed="false">
+			<div class="holder">
+				<h3 id="header"></h3>
+				<p id="message"></p>
+				<img id="spinner" src="assets/loading.gif" />
+			</div>
+		</div>
+
+		<div id="progress">
+			<span data-selected="true"></span>
+			<span data-selected="false"></span>
+		</div>
+
+		<script src="downloader.js"></script>
+
+	</body>
+
+</html>
