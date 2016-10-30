@@ -92,6 +92,11 @@ form button:focus{
 	align-items: center;
 	align-content: center;
 	justify-content: center;
+	transform: translateY(0);
+	-webkit-transition: transform 0.5s ease-in-out;
+}
+#progress[data-active="false"]{
+	transform: translateY(100%);
 }
 
 #progress span{

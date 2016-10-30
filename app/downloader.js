@@ -21,6 +21,7 @@ const carpathia = (function(){
 
 	const FORM_ANIMATION_TIME = 300;
 	const DIALOG_ANIMATION_TIME = 700;
+	const PROGRESS_ANIMATION_TIME = 500;
 
 	const dialog = (function(){
 
@@ -68,20 +69,40 @@ const carpathia = (function(){
 
 	}());
 
-	const progressIndicator = function(idx){
-
+	const progressIndicator = (function(){
+		
 		const progressElement = document.querySelector('#progress');
 		const spans = progressElement.querySelectorAll('span');
 
-		spans.forEach( (span, spanIdx) => {
-			if(spanIdx === idx){
-				span.dataset.selected = "true";
-			} else {
-				span.dataset.selected = "false";
-			}
-		});
+		function setProgressIndicatorPosition(idx){
+			
+			spans.forEach( (span, spanIdx) => {
+				if(spanIdx === idx){
+					span.dataset.selected = "true";
+				} else {
+					span.dataset.selected = "false";
+				}
+			});
 
-	};
+		}
+
+		function showProgressIndicator(){
+			progressElement.dataset.active = "true";
+			return wait(PROGRESS_ANIMATION_TIME);
+		}
+
+		function hideProgressIndicator(){
+			progressElement.dataset.active = "false";
+			return wait(PROGRESS_ANIMATION_TIME);
+		}
+
+		return {
+			set : setProgressIndicatorPosition,
+			show : showProgressIndicator,
+			hide : hideProgressIndicator
+		};
+
+	}());
 
 	const downloadIndicator = (function(){
 
@@ -303,7 +324,7 @@ const carpathia = (function(){
 				fileDestinationForm.querySelector('h3').textContent = `You have ${VINE_VIDEOS.length} videos to download`;
 				fileDestinationForm.dataset.active = "true";
 				
-				progressIndicator(1);
+				progressIndicator.set(1);
 			})
 			.catch(err => {
 				console.log(err);
@@ -322,6 +343,7 @@ const carpathia = (function(){
 				fileDestinationForm.dataset.completed = "true";
 				wait(FORM_ANIMATION_TIME)
 					.then(function(){
+						progressIndicator.hide();
 						downloadIndicator.set(0);
 						downloadIndicator.show().then(retrieveVideos);
 					})
