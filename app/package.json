@@ -1,5 +1,7 @@
 {
   "name"    : "carpathia",
   "version" : "0.1.0",
-  "main"    : "main.js"
+  "main"    : "main.js",
+  "author": "Sean M. Tracey",
+  "license" : "MIT"
 }
