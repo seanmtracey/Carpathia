@@ -4,6 +4,7 @@ const carpathia = (function(){
 	const electron = require('electron');
 	const systemDialog = electron.remote.dialog;
 	var systemFS = electron.remote.require('fs');
+	const htmlify = require('./htmlify');
 
 	const prevent = (e) => {e.preventDefault();};
 	const wait = (time) => {
@@ -13,6 +14,7 @@ const carpathia = (function(){
 			}, time);
 		})
 	}
+
 	const VINE_ROOT = `https://vine.co`;
 	let VINE_VIDEOS = [];
 	let VINE_DESTINATION = undefined;
@@ -173,7 +175,7 @@ const carpathia = (function(){
 			fetch(vine.videoUrl)
 				.then(res => res.blob())
 				.then(blob => {
-
+					htmlify.add(vine);
 					var arrayBuffer;
 					var fileReader = new FileReader();
 					fileReader.onload = function() {
@@ -189,6 +191,8 @@ const carpathia = (function(){
 								downloadIndicator.set(COMPLETED_DOWNLOADS);
 
 								if(COMPLETED_DOWNLOADS - ERRORED_DOWNLOADS === VINE_VIDEOS.length){
+									const doc = htmlify.output();
+									systemFS.writeFileSync(`${VINE_DESTINATION}/index.html`, doc);
 									downloadIndicator.hide()
 										.then(function(){
 											const buttonHandler = function(){
