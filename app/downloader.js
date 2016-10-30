@@ -23,6 +23,29 @@ const carpathia = (function(){
 	const DIALOG_ANIMATION_TIME = 700;
 	const PROGRESS_ANIMATION_TIME = 500;
 
+	function reset(){
+
+		VINE_VIDEOS = [];
+		VINE_DESTINATION = undefined;
+		COMPLETED_DOWNLOADS = 0;
+		ERRORED_DOWNLOADS = 0;
+
+		userNameForm.reset();
+		userNameForm.dataset.completed = "false";
+		userNameForm.dataset.active = "true";
+
+		fileDestinationForm.dataset.completed = "false";
+		fileDestinationForm.dataset.active = "false";
+		fileDestinationForm.dataset.visible = "false";
+
+		wait(FORM_ANIMATION_TIME).then(function(){
+			fileDestinationForm.dataset.visible = "true";
+		});
+
+		progressIndicator.set(0);
+		progressIndicator.show();
+	}
+
 	const dialog = (function(){
 
 		const minimumDisplay = 3000;
@@ -68,6 +91,11 @@ const carpathia = (function(){
 		};
 
 	}());
+
+	const hideDialogWithButton = function(){
+		dialog.button.removeEventListener('click', hideDialogWithButton, false);
+		dialog.hide();
+	};
 
 	const progressIndicator = (function(){
 		
@@ -162,10 +190,21 @@ const carpathia = (function(){
 								if(COMPLETED_DOWNLOADS - ERRORED_DOWNLOADS === VINE_VIDEOS.length){
 									downloadIndicator.hide()
 										.then(function(){
+											const buttonHandler = function(){
+												
+												reset();
+
+												dialog.button.removeEventListener('click', buttonHandler, false);
+												dialog.hide();
+											};
+
+											dialog.button.addEventListener('click', buttonHandler, false);
 											dialog.show(
 												'Vines downloaded!',
 												`All of your Vines have been saved to ${VINE_DESTINATION}`,
-												false
+												false,
+												true,
+												"ok"
 											);
 										})
 									;
@@ -188,7 +227,7 @@ const carpathia = (function(){
 	}
 
 	function getVideoDetails(profileID){
-		console.log(profileID);
+
 		const rootURL = `https://vine.co/api/timelines/users/${profileID}`;
 		const requests = [];
 
@@ -218,7 +257,6 @@ const carpathia = (function(){
 
 				return Promise.all(requests)
 					.then(responses => {
-						console.log(responses);
 
 						const allVideos = [];
 						
@@ -276,11 +314,9 @@ const carpathia = (function(){
 	userNameForm.addEventListener('submit', prevent, false);
 
 	userNameForm.addEventListener('submit', function(e){
-		console.log("Form submitted");
 
 		figureOutProfileID(this.usernameInput.value)
 			.then(res => {
-				console.log(res);
 
 				if(res.status !== 200){
 					// Handle no profile
@@ -313,7 +349,7 @@ const carpathia = (function(){
 			})
 			.then(videos => {
 				dialog.hide();
-				console.log(videos, videos.length);
+
 				VINE_VIDEOS = videos;
 				return wait(500);
 			})
@@ -328,6 +364,15 @@ const carpathia = (function(){
 			})
 			.catch(err => {
 				console.log(err);
+
+				dialog.button.addEventListener('click', hideDialogWithButton, false);
+				dialog.show(
+					'An error occurred',
+					'Sorry, something went wrong somewhere',
+					false,
+					true,
+					"ok"
+				);
 			})
 		;
 
@@ -338,7 +383,7 @@ const carpathia = (function(){
 
 		systemDialog.showOpenDialog({properties: ['openDirectory', 'createDirectory']}, dest => {
 			if(dest !== undefined){
-				console.log(dest);
+
 				VINE_DESTINATION = dest;
 				fileDestinationForm.dataset.completed = "true";
 				wait(FORM_ANIMATION_TIME)
